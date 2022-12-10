@@ -20,6 +20,9 @@ const homeSchema = mongoose.Schema({
     type:String,
     required:true
   },
+  phoneNumber:{
+    type:Number,
+  },
   price: {
     type: Number,
     required: true,
