@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import home from "../models/home.js";
 import Home from "../models/home.js";
+import user from "../models/user.js";
 import cloudinary from "../utils/cluodinary.js";
 
 export const createHome = async (req,res) => {
@@ -47,11 +48,11 @@ export const findbyId = async (req,res) => {
   const { id } = req.params
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({message:`no home with id:${id}`})
   const newhome = await home.findById(id)
-  res.status(200).json(newhome)
+  const owner = await user.findById(newhome.creator)
+  res.status(200).json({owner,newhome})
 }
 
 export const deleteHome = async(req,res) => {
-
   const {id} = req.params
 
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({message:`no home with id:${id}`})
