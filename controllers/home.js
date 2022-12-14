@@ -18,7 +18,7 @@ export const createHome = async (req,res) => {
       ...req.body,image:images, creator:req.userId,
     })
     const savedHome = await newHome.save()
-    res.status(201).json({message:'home successfuly created'})
+    res.status(201).json({message:'home successfuly created',newHome:newHome})
   } catch (error) {
     res.status(500).json({message:'something went wrong'})
   }
@@ -33,15 +33,19 @@ export const getAllposts = async (req,res) => {
     res.status(404).json({message:"no homes found"})
   }
 }
+
+export const getUserPosts = async(req,res) => {
+  const {id} = req.params
+  const userPosts = await home.find({creator:id})
+  res.status(200).json(userPosts)
+}
 export const updateHome = async(req,res) => {
   const {id} = req.params
-  console.log(id)
-  console.log(req.body)
   if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).json({message:`no home with id:${id}`})
 
-  await home.findByIdAndUpdate(id,req.body,{new:true})
+  const updatedHome = await home.findByIdAndUpdate(id,req.body,{new:true})
 
-  res.status(200).json({message:'home successfully updated'})
+  res.status(200).json({message:'home successfully updated',updatedHome:updatedHome})
 }
 
 export const findbyId = async (req,res) => {
